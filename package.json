@@ -1,0 +1,16 @@
+{
+  "name": "ariyam-travel-journal",
+  "version": "1.0.0",
+  "description": "Node + MongoDB backend for the Ariyam travel report app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.4",
+    "dotenv": "^16.4.1",
+    "express": "^4.19.0",
+    "mongoose": "^8.8.0"
+  }
+}

@@ -1,0 +1,349 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ariyam · A travel journal for Kerala's student events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Ariyam home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 60 60">
+            <circle cx="30" cy="30" r="27" class="mark-ring" />
+            <text x="30" y="38" class="mark-letter">A</text>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">Ariyam</span>
+          <span class="brand-sub">field notes for student events</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#reports">Reports</a>
+        <a href="#add-report">Add a report</a>
+        <a href="#how-it-works">How it works</a>
+      </nav>
+
+      <form class="top-search" id="topSearchForm" role="search">
+        <label class="sr-only" for="topDistrictSearch">Search district</label>
+        <svg class="search-glyph" viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="6.5" />
+          <line x1="13.2" y1="13.2" x2="18" y2="18" />
+        </svg>
+        <input
+          id="topDistrictSearch"
+          type="search"
+          placeholder="Search a district"
+          autocomplete="off"
+        />
+        <button type="submit">Go</button>
+      </form>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-copy">
+          <p class="eyebrow">A crowdsourced travel log &middot; built by students, for students</p>
+          <h1>Know before <span>you go.</span></h1>
+          <p class="hero-text">
+            Before you pack for the next fest, symposium, or workshop, see what students who already
+            made the trip have to say &mdash; the hotel that was actually clean, the meals shop worth the
+            walk, and the spot to see once the event wraps up.
+          </p>
+
+          <div class="hero-search-card">
+            <p class="hero-search-label">Where's the event?</p>
+            <form class="hero-search" id="heroSearchForm" role="search">
+              <label class="sr-only" for="heroDistrictSearch">Search district</label>
+              <input
+                id="heroDistrictSearch"
+                type="search"
+                placeholder="Try &ldquo;Ernakulam&rdquo; or &ldquo;Kozhikode&rdquo;"
+                autocomplete="off"
+              />
+              <button type="submit">Trace it</button>
+            </form>
+            <p class="hero-stats">
+              <span><strong id="statReports">0</strong> reports logged</span>
+              <span class="stats-dot">&middot;</span>
+              <span><strong id="statDistricts">0</strong> districts covered</span>
+            </p>
+          </div>
+
+          <div class="hero-actions">
+            <a class="primary-action" href="#add-report">Add your report</a>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <article class="postcard postcard--one">
+            <div class="postcard-stamp">Thiruvananthapuram</div>
+            <h3>Tech Fest 2026</h3>
+            <p>John Cox Memorial CSI Institute of Technology</p>
+            <span class="postcard-rating">Hotel 4/5</span>
+          </article>
+          <article class="postcard postcard--two">
+            <div class="postcard-stamp">Kozhikode</div>
+            <h3>Design Sprint</h3>
+            <p>Student Innovation Forum</p>
+            <span class="postcard-rating">Hotel 5/5</span>
+          </article>
+          <article class="postcard postcard--three">
+            <div class="postcard-stamp">Thrissur</div>
+            <h3>Literary Meet</h3>
+            <p>St. Thomas College</p>
+            <span class="postcard-rating">Day trip</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="district-rail" aria-label="Popular district filters">
+        <span class="rail-label">Jump to a district</span>
+        <div class="rail-track" id="districtRail">
+          <button type="button" class="chip chip--all" data-district="">All districts</button>
+          <button type="button" class="chip" data-district="Thiruvananthapuram">Thiruvananthapuram</button>
+          <button type="button" class="chip" data-district="Kollam">Kollam</button>
+          <button type="button" class="chip" data-district="Pathanamthitta">Pathanamthitta</button>
+          <button type="button" class="chip" data-district="Alappuzha">Alappuzha</button>
+          <button type="button" class="chip" data-district="Kottayam">Kottayam</button>
+          <button type="button" class="chip" data-district="Idukki">Idukki</button>
+          <button type="button" class="chip" data-district="Ernakulam">Ernakulam</button>
+          <button type="button" class="chip" data-district="Thrissur">Thrissur</button>
+          <button type="button" class="chip" data-district="Palakkad">Palakkad</button>
+          <button type="button" class="chip" data-district="Malappuram">Malappuram</button>
+          <button type="button" class="chip" data-district="Kozhikode">Kozhikode</button>
+          <button type="button" class="chip" data-district="Wayanad">Wayanad</button>
+          <button type="button" class="chip" data-district="Kannur">Kannur</button>
+          <button type="button" class="chip" data-district="Kasaragod">Kasaragod</button>
+        </div>
+      </section>
+
+      <section class="route" id="how-it-works" aria-label="How Ariyam works">
+        <div class="route-stop">
+          <span class="route-pin">01</span>
+          <h3>Find your district</h3>
+          <p>Search or tap a district to see only the events students have already logged there.</p>
+        </div>
+        <div class="route-line" aria-hidden="true"></div>
+        <div class="route-stop">
+          <span class="route-pin">02</span>
+          <h3>Read the field notes</h3>
+          <p>Hotel ratings, food spots, tourist stops, pinned locations, and directions from a past attendee.</p>
+        </div>
+        <div class="route-line" aria-hidden="true"></div>
+        <div class="route-stop">
+          <span class="route-pin">03</span>
+          <h3>Log your own trip</h3>
+          <p>Once your event is done, add your report and pin the exact spots so the next student travels easier.</p>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <section class="panel report-form-panel" id="add-report">
+          <div class="section-heading">
+            <p class="eyebrow">Share what you learned</p>
+            <h2>Add a field report</h2>
+            <p>Fill this out once your event is over &mdash; future students will thank you.</p>
+          </div>
+
+          <form class="report-form" id="reportForm">
+            <div class="form-row">
+              <label>
+                Event name
+                <input id="eventName" type="text" placeholder="e.g. Tech Fest 2026" />
+              </label>
+              <label>
+                Event district
+                <select id="eventDistrict">
+                  <option value="">Select district</option>
+                  <option value="Alappuzha">Alappuzha</option>
+                  <option value="Ernakulam">Ernakulam</option>
+                  <option value="Idukki">Idukki</option>
+                  <option value="Kannur">Kannur</option>
+                  <option value="Kasaragod">Kasaragod</option>
+                  <option value="Kollam">Kollam</option>
+                  <option value="Kottayam">Kottayam</option>
+                  <option value="Kozhikode">Kozhikode</option>
+                  <option value="Malappuram">Malappuram</option>
+                  <option value="Palakkad">Palakkad</option>
+                  <option value="Pathanamthitta">Pathanamthitta</option>
+                  <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                  <option value="Thrissur">Thrissur</option>
+                  <option value="Wayanad">Wayanad</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Event organisation
+              <input
+                id="eventOrganisation"
+                type="text"
+                placeholder="College, club, organisation, or team"
+              />
+            </label>
+
+            <label>
+              How many days event
+              <input
+                id="eventDays"
+                type="text"
+                placeholder="e.g. 2 days or 3 days"
+              />
+            </label>
+
+            <div class="form-row compact-row">
+              <label>
+                Stayed in a hotel?
+                <select id="hotelStay">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </label>
+              <label>
+                Hotel rating
+                <select id="hotelRating">
+                  <option value="5">5 &ndash; Excellent</option>
+                  <option value="4">4 &ndash; Good</option>
+                  <option value="3">3 &ndash; Okay</option>
+                  <option value="2">2 &ndash; Poor</option>
+                  <option value="1">1 &ndash; Bad</option>
+                  <option value="Not rated">Not rated</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Hotel review
+              <textarea
+                id="hotelReview"
+                rows="3"
+                placeholder="Cleanliness, safety, distance from venue, price..."
+              ></textarea>
+            </label>
+
+            <label>
+              Amount for one room
+              <input
+                id="roomAmount"
+                type="text"
+                placeholder="e.g. ₹1800 per day"
+              />
+            </label>
+
+            <label>
+              Hotel photos
+              <input id="hotelImages" type="file" accept="image/*" multiple />
+            </label>
+            <div id="hotelImagePreview" class="image-preview-grid" aria-live="polite"></div>
+
+            <label>
+              Food spots visited
+              <textarea
+                id="foodSpots"
+                rows="3"
+                placeholder="Restaurants, cafes, tea shops, must-try dishes..."
+              ></textarea>
+            </label>
+
+            <label>
+              Tourist places visited
+              <textarea
+                id="touristPlaces"
+                rows="3"
+                placeholder="Nearby beach, museum, park, temple, viewpoint..."
+              ></textarea>
+            </label>
+
+            <div class="form-row compact-row">
+              <label>
+                Search hotel by name or area
+                <input
+                  id="hotelSearchInput"
+                  type="text"
+                  placeholder="Type a hotel name"
+                  autocomplete="off"
+                />
+              </label>
+              <button type="button" id="loadPlacesButton" class="secondary-action">Search hotel</button>
+            </div>
+
+            <div id="hotelPlacesStatus" class="location-hint" aria-live="polite"></div>
+            <div id="hotelPlacesSuggestions" class="location-suggestions"></div>
+            <div id="selectedHotelCard" class="detail-grid" aria-live="polite"></div>
+
+            <label>
+              Tourist place name or address
+              <input
+                id="touristMapsLink"
+                type="text"
+                placeholder="e.g. Athirappilly Waterfalls or Varkala Beach"
+              />
+            </label>
+
+            <div id="locationPreview" class="detail-grid" aria-live="polite"></div>
+
+            <label>
+              Tourist place photos
+              <input id="touristImages" type="file" accept="image/*" multiple />
+            </label>
+            <div id="touristImagePreview" class="image-preview-grid" aria-live="polite"></div>
+
+            <label>
+              Extra features or tips
+              <textarea
+                id="extraFeatures"
+                rows="3"
+                placeholder="Transport tips, budget advice, best time, safety..."
+              ></textarea>
+            </label>
+
+            <button class="submit-button" type="submit">
+              <span>Stamp &amp; add report</span>
+            </button>
+          </form>
+        </section>
+
+        <section class="panel reports-panel" id="reports">
+          <div class="section-heading">
+            <p class="eyebrow">The log</p>
+            <h2>District field reports</h2>
+            <p id="resultSummary">Showing all available reports.</p>
+          </div>
+
+          <div class="reports-list" id="reportsList" aria-live="polite"></div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span class="footer-mark" aria-hidden="true">A</span>
+      <div>
+        <strong>Ariyam</strong>
+        <span>Built by students, kept honest by students &mdash; one district at a time.</span>
+      </div>
+    </footer>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>
